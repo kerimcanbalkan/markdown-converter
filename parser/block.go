@@ -13,11 +13,9 @@ func parseBlocks(input string) []*Node {
 		line := scanner.Text()
 		if node := parseHeading(line); node != nil {
 			nodes = append(nodes, node)
-		}
-		if node := parseBlockquote(line); node != nil {
+		} else if node := parseBlockquote(line); node != nil {
 			nodes = append(nodes, node)
-		}
-		if node := parseParagraph(line); node != nil {
+		} else if len(line) > 0 {
 			node := parseParagraph(line)
 			nodes = append(nodes, node)
 		} else {
@@ -54,21 +52,16 @@ func parseHeading(line string) *Node {
 }
 
 func parseParagraph(line string) *Node {
-	if len(line) != 0 {
-
-		return &Node{
-			Type:    ParagraphNode,
-			Content: strings.TrimSpace(line),
-			Children: []*Node{
-				{
-					Type:    TextNode,
-					Content: strings.TrimSpace(line),
-				},
+	return &Node{
+		Type:    ParagraphNode,
+		Content: strings.TrimSpace(line),
+		Children: []*Node{
+			{
+				Type:    TextNode,
+				Content: strings.TrimSpace(line),
 			},
-		}
-
+		},
 	}
-	return nil
 }
 
 func parseBlockquote(line string) *Node {
